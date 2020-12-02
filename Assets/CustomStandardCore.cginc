@@ -433,7 +433,7 @@ VertexOutputForwardBase vertForwardBase (VertexInput v)
 sampler2D _CameraDepthTexture;
 
 half4 fragForwardBaseInternal (VertexOutputForwardBase i
-#if _ALPHABLEND_ON
+#if _TRANSPARENTDEPTH
 	, inout float oDepth
 #endif
 )
@@ -457,7 +457,7 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i
     UNITY_APPLY_FOG(i.fogCoord, c.rgb);
 
 	// write depth
-#if _ALPHABLEND_ON
+#if _TRANSPARENTDEPTH
 	float2 screenUV = i.screenUV.xy / i.screenUV.w;
 	float sceneDepth = tex2D(_CameraDepthTexture, screenUV).r;
 
@@ -468,13 +468,13 @@ half4 fragForwardBaseInternal (VertexOutputForwardBase i
 }
 
 half4 fragForwardBase(VertexOutputForwardBase i
-#if _ALPHABLEND_ON
+#if _TRANSPARENTDEPTH
 	, out float oDepth : SV_DepthGreaterEqual
 #endif
 ) : SV_Target   // backward compatibility (this used to be the fragment entry function)
 {
     return fragForwardBaseInternal(i
-#if _ALPHABLEND_ON
+#if _TRANSPARENTDEPTH
 	, oDepth
 #endif
 	);
